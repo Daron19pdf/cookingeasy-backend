@@ -32,12 +32,12 @@ router.post("/equipement", (req, res) => {
 
   router.post("/alimentexclus", (req, res) => {
     const { exclus, Token } = req.body;
-    User.findOne({ Token: Token }).then(async (user) => {
+    User.findOne({ token: Token }).then(async (user) => {
       console.log(user);
       if (user) {
         const preferenceUser = await Preference.findById(user.preference);
         console.log(preferenceUser);
-          preferenceUser.alimentExclus = {
+          preferenceUser.alimentExclu = {
             exclus: exclus,
             Token: Token,
           };
