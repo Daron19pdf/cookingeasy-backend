@@ -34,13 +34,10 @@ exclus: String,
 
 //Collection Préférence//
 const preferenceSchema = mongoose.Schema({
-//Collection Foyer//
+
 foyer: foyerSchema,
-//Collection Equipement//
 equipement : equipementSchema,
-//Collection Régime alimentaire//
 regime : regimeSchema,
-//Collection Aliment à exclure//
 alimentExclu : alimentExcluSchema,
 });
 
