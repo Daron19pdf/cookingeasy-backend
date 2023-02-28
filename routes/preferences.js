@@ -28,6 +28,5 @@ router.post("/equipement", (req, res) => {
         res.json({ result: false, error: "Utilisateur inexistant." });
       }
     });
-
   });
   module.exports = router;
