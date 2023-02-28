@@ -34,11 +34,30 @@ router.post("/equipement", (req, res) => {
   router.post("/alimentexclus", (req, res) => {
     const { exclus, token } = req.body;
     User.findOne({ Token: token }).then(async (user) => {
-      console.log(user);
       if (user) {
         const preferenceUser = await Preference.findById(user.preference);
           preferenceUser.alimentExclu = {
             exclus: exclus,
+            Token: token,
+          };
+          preferenceUser.save().then(() => {
+            res.json({ result: true });
+          });
+      } else {
+        res.json({ result: false, error: "Utilisateur inexistant." });
+      }
+    });
+
+  });
+
+  router.post("/foyer", (req, res) => {
+    const { nombrePersonne,nombreRecette, token } = req.body;
+    User.findOne({ Token: token }).then(async (user) => {
+      if (user) {
+        const preferenceUser = await Preference.findById(user.preference);
+          preferenceUser.foyer = {
+            nombrePersonne: nombrePersonne,
+            nombreRecette: nombreRecette,
             Token: token,
           };
           preferenceUser.save().then(() => {
