@@ -75,7 +75,7 @@ router.post("/equipement", (req, res) => {
     User.findOne({ Token: token }).then(async (user) => {
       if (user) {
         const preferenceUser = await Preference.findById(user.preference);
-          preferenceUser.foyer = {
+          preferenceUser.regime = {
             vegetarien: vegetarien,
             vegan: vegan,
             pescetarien: pescetarien,
