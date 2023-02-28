@@ -29,4 +29,27 @@ router.post("/equipement", (req, res) => {
       }
     });
   });
+
+  router.post("/alimentexclus", (req, res) => {
+    const { exclus, Token } = req.body;
+    User.findOne({ Token: Token }).then(async (user) => {
+      console.log(user);
+      if (user) {
+        const preferenceUser = await Preference.findById(user.preference);
+        console.log(preferenceUser);
+          preferenceUser.alimentExclus = {
+            exclus: exclus,
+            Token: Token,
+          };
+          preferenceUser.save().then(() => {
+            res.json({ result: true });
+          });
+      } else {
+        res.json({ result: false, error: "Utilisateur inexistant." });
+      }
+    });
+
+  });
+
+
   module.exports = router;

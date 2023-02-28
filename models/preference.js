@@ -37,15 +37,15 @@ exclus: String,
 Token: String,
 });
 
-//Collection Préférence//
+//Collection sous doc Préférence//
 const preferenceSchema = mongoose.Schema({
-//Collection Foyer//
+//Collection sous doc Foyer//
 foyer: foyerSchema,
-//Collection Equipement//
+//Collection sous doc Equipement//
 equipement : equipementSchema,
-//Collection Régime alimentaire//
+//Collection sous doc Régime alimentaire//
 regime : regimeSchema,
-//Collection Aliment à exclure//
+//Collection sous doc Aliment à exclure//
 alimentExclu : alimentExcluSchema,
 });
 
