@@ -5,7 +5,7 @@ const userSchema = mongoose.Schema({
 	
 pseudo : String,
 nom: String,
-prénom: String,
+prenom: String,
 password : String,
 email: String,
 token: String,
