@@ -70,5 +70,31 @@ router.post("/equipement", (req, res) => {
 
   });
 
+  router.post("/regime", (req, res) => {
+    const { vegetarien,vegan,pescetarien,gluten,porc,alcool,lactose,sansRegimeParticulier, token } = req.body;
+    User.findOne({ Token: token }).then(async (user) => {
+      if (user) {
+        const preferenceUser = await Preference.findById(user.preference);
+          preferenceUser.foyer = {
+            vegetarien: vegetarien,
+            vegan: vegan,
+            pescetarien: pescetarien,
+            gluten: gluten,
+            porc: porc, 
+            alcool: alcool,
+            lactose: lactose, 
+            sansRegimeParticulier : sansRegimeParticulier,
+            Token: token,
+          };
+          preferenceUser.save().then(() => {
+            res.json({ result: true });
+          });
+      } else {
+        res.json({ result: false, error: "Utilisateur inexistant." });
+      }
+    });
+
+  });
+
 
   module.exports = router;
