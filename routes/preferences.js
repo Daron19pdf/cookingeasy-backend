@@ -39,7 +39,7 @@ router.post("/equipement", (req, res) => {
         console.log(preferenceUser);
           preferenceUser.alimentExclu = {
             exclus: exclus,
-            Token: Token,
+            Token: token,
           };
           preferenceUser.save().then(() => {
             res.json({ result: true });
