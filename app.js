@@ -10,7 +10,6 @@ var indexRouter = require('./routes/index');
 var UserRouter = require('./routes/user');
 var PreferencesRouter = require('./routes/preferences');
 
-
 var app = express();
 
 const cors = require('cors');
