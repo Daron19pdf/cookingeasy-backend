@@ -5,11 +5,11 @@ const User = require('../models/users');
 const fetch = require('node-fetch')
 
 
-//ici juste pour tester si ça marche//
-//router.get('/user', function(req, res) {
-//    res.send('respond with a resource')
-//   console.log("hello");;
-//});
+
+router.get('/user', function(req, res) {
+   res.send('respond with a resource')
+  console.log("hello");;
+});
 
 
 
