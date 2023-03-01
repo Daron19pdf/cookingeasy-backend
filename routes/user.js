@@ -27,9 +27,8 @@ router.post("/signup", (req, res) => {
           preference: newPref._id,
         });
 
-        newUser.save().then(() => {
-          console.log(newUser);
-          res.json({ result: true, token: newUser.token});
+        newUser.save().then((data) => {
+          res.json({ result: true, token: data.token });
         });
       });
     } else {
