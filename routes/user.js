@@ -6,12 +6,14 @@ const Preference = require("../models/preference");
 const uid2 = require("uid2");
 const { checkBody } = require("../modules/checkBody");
 const fetch = require('node-fetch')
+const bcrypt = require('bcrypt');
 
 router.post("/signup", (req, res) => {
   if (!checkBody(req.body, ["pseudo", "nom", "prenom", "password", "email"])) {
     res.json({ result: false, error: "Tous les champs doivent être remplis" });
     return;
   }
+  const hash = bcrypt.hashSync('password', 10);
   User.findOne({ email: req.body.email }).then((data) => {
     //const token = uid2(32);
     if (data === null) {
@@ -22,7 +24,7 @@ router.post("/signup", (req, res) => {
           pseudo: req.body.pseudo,
           nom: req.body.nom,
           prenom: req.body.prenom,
-          password: req.body.password,
+          password: hash,
           email: req.body.email,
           token: uid2(32),
           preference: newPref._id,
