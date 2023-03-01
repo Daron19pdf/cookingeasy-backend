@@ -5,6 +5,7 @@ const User = require("../models/users");
 const Preference = require("../models/preference");
 const uid2 = require("uid2");
 const { checkBody } = require("../modules/checkBody");
+const fetch = require('node-fetch')
 
 router.post("/signup", (req, res) => {
   if (!checkBody(req.body, ["pseudo", "nom", "prenom", "password", "email"])) {

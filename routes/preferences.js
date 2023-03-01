@@ -5,6 +5,7 @@ const User = require("../models/users");
 const Preference = require("../models/preference");
 const uid2 = require("uid2");
 const { checkBody } = require("../modules/checkBody");
+const fetch = require('node-fetch')
 
 router.post("/equipement", (req, res) => {
     const { four, mixeur, plaque, friteuse, robot, microondes, token } = req.body;
@@ -32,13 +33,13 @@ router.post("/equipement", (req, res) => {
 
   router.post("/alimentexclus", (req, res) => {
     const { exclus, token } = req.body;
-    User.findOne({ Token: token }).then(async (user) => {
+    User.findOne({ token: token }).then(async (user) => {
       if (user) {
         const preferenceUser = await Preference.findById(user.preference);
         console.log(preferenceUser);
           preferenceUser.alimentExclu = {
             exclus: exclus,
-            Token: token,
+            token: token,
           };
           preferenceUser.save().then(() => {
             res.json({ result: true });
@@ -52,13 +53,13 @@ router.post("/equipement", (req, res) => {
 
   router.post("/foyer", (req, res) => {
     const { nombrePersonne,nombreRecette, token } = req.body;
-    User.findOne({ Token: token }).then(async (user) => {
+    User.findOne({ token: token }).then(async (user) => {
       if (user) {
         const preferenceUser = await Preference.findById(user.preference);
           preferenceUser.foyer = {
             nombrePersonne: nombrePersonne,
             nombreRecette: nombreRecette,
-            Token: token,
+            token: token,
           };
           preferenceUser.save().then(() => {
             res.json({ result: true });
@@ -72,7 +73,7 @@ router.post("/equipement", (req, res) => {
 
   router.post("/regime", (req, res) => {
     const { vegetarien,vegan,pescetarien,gluten,porc,alcool,lactose,sansRegimeParticulier, token } = req.body;
-    User.findOne({ Token: token }).then(async (user) => {
+    User.findOne({ token: token }).then(async (user) => {
       if (user) {
         const preferenceUser = await Preference.findById(user.preference);
           preferenceUser.regime = {
@@ -84,7 +85,7 @@ router.post("/equipement", (req, res) => {
             alcool: alcool,
             lactose: lactose, 
             sansRegimeParticulier : sansRegimeParticulier,
-            Token: token,
+            token: token,
           };
           preferenceUser.save().then(() => {
             res.json({ result: true });

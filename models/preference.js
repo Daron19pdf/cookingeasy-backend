@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const foyerSchema = mongoose.Schema({
 nombrePersonne: Number,
 nombreRecette: Number,
-Token: String,
+token: String,
 });
 
 //Sous document Equipement//
@@ -15,7 +15,7 @@ plaque : Boolean,
 friteuse: Boolean,
 robot: Boolean,
 microondes: Boolean,
-Token: String,
+token: String,
 });
 
 //Sous document Régime alimentaire//
@@ -28,13 +28,13 @@ porc: Boolean,
 alcool: Boolean,
 lactose: Boolean, 
 sansRegimeParticulier : Boolean,
-Token: String,
+token: String,
 });
 
 //Sous document Aliment à exclure//
 const alimentExcluSchema = mongoose.Schema({
 exclus: String,
-Token: String,
+token: String,
 });
 
 //Collection sous doc Préférence//
