@@ -5,6 +5,7 @@ const User = require("../models/users");
 const Preference = require("../models/preference");
 const uid2 = require("uid2");
 const { checkBody } = require("../modules/checkBody");
+const fetch = require("node-fetch");
 
 router.post("/equipement", (req, res) => {
     const { four, mixeur, plaque, friteuse, robot, microondes, token } = req.body;
@@ -32,16 +33,18 @@ router.post("/equipement", (req, res) => {
 
   router.post("/alimentexclus", (req, res) => {
     const { exclus, token } = req.body;
-    User.findOne({ Token: token }).then(async (user) => {
+    User.find({ token: token }).then(async (user) => {
       if (user) {
+        console.log(user);
         const preferenceUser = await Preference.findById(user.preference);
         console.log(preferenceUser);
           preferenceUser.alimentExclu = {
             exclus: exclus,
-            Token: token,
+            token: token,
           };
-          preferenceUser.save().then(() => {
+          preferenceUser.save().then((data) => {
             res.json({ result: true });
+            console.log(data);
           });
       } else {
         res.json({ result: false, error: "Utilisateur inexistant." });
@@ -95,6 +98,19 @@ router.post("/equipement", (req, res) => {
     });
 
   });
+
+  
+  router.get('/alimentexclus' , (req,res) => {
+    Preference.find().then(data => {
+      if (data) {
+        console.log(data);
+        res.json( {result : true , data})
+      } else {
+        res.json({result : false })
+      }
+    })
+  });
+
 
 
   module.exports = router;
