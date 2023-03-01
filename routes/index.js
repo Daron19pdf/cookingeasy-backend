@@ -6,10 +6,10 @@ const fetch = require('node-fetch')
 
 
 
-router.get('/user', function(req, res) {
-   res.send('respond with a resource')
-  console.log("hello");;
-});
+// router.get('/user', function(req, res) {
+//    res.send('respond with a resource')
+//   console.log("hello");;
+// });
 
 
 
