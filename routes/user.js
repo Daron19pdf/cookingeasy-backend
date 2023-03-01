@@ -12,7 +12,7 @@ router.post("/signup", (req, res) => {
     return;
   }
   User.findOne({ email: req.body.email }).then((data) => {
-    const token = uid2(32);
+    //const token = uid2(32);
     if (data === null) {
       const newPref = new Preference({});
 
@@ -23,12 +23,13 @@ router.post("/signup", (req, res) => {
           prenom: req.body.prenom,
           password: req.body.password,
           email: req.body.email,
-          token: token,
+          token: uid2(32),
           preference: newPref._id,
         });
 
         newUser.save().then(() => {
-          res.json({ result: true });
+          console.log(newUser);
+          res.json({ result: true, token: newUser.token});
         });
       });
     } else {
