@@ -5,18 +5,18 @@ const User = require("../models/users");
 const Preference = require("../models/preference");
 const uid2 = require("uid2");
 const { checkBody } = require("../modules/checkBody");
-const fetch = require('node-fetch')
-const bcrypt = require('bcrypt');
+const fetch = require("node-fetch");
+const bcrypt = require("bcrypt");
 
 router.post("/signup", (req, res) => {
   if (!checkBody(req.body, ["pseudo", "nom", "prenom", "password", "email"])) {
     res.json({ result: false, error: "Tous les champs doivent être remplis" });
     return;
   }
-  const hash = bcrypt.hashSync('password', 10);
+
   User.findOne({ email: req.body.email }).then((data) => {
-    //const token = uid2(32);
     if (data === null) {
+      const hash = bcrypt.hashSync(req.body.password, 10);
       const newPref = new Preference({});
 
       newPref.save().then((newPref) => {
@@ -28,7 +28,7 @@ router.post("/signup", (req, res) => {
           email: req.body.email,
           token: uid2(32),
           preference: newPref._id,
-          editor: { type: mongoose.Schema.Types.ObjectId, ref: 'editors' },
+          editor: { type: mongoose.Schema.Types.ObjectId, ref: "editors" },
         });
 
         newUser.save().then((data) => {
@@ -42,18 +42,30 @@ router.post("/signup", (req, res) => {
   });
 });
 
-router.post('/signin', (req, res) => {
-  if (!checkBody(req.body, ['pseudo', 'password'])) {
-    res.json({ result: false, error: 'Tous les champs doivent être remplis' });
+router.post("/signin", (req, res) => {
+  if (!checkBody(req.body, ["pseudo", "password"])) {
+    res.json({ result: false, error: "Tous les champs doivent être remplis" });
     return;
   }
 
-  User.findOne({ pseudo: req.body.pseudo }).then(data => {
+  User.findOne({ pseudo: req.body.pseudo }).then((data) => {
+    console.log(req.body.password, data.password);
+    console.log(bcrypt.compareSync(req.body.password, data.password));
     if (data && bcrypt.compareSync(req.body.password, data.password)) {
-      res.json({ result: true, nom: data.nom, prenom: data.prenom, email: data.email, token: data.token });
+      res.json({
+        result: true,
+        nom: data.nom,
+        prenom: data.prenom,
+        email: data.email,
+        token: data.token,
+      });
     } else {
-      res.json({ result: false, error: 'Utilisateur inexistant ou mot de passe incorrect' });
+      res.json({
+        result: false,
+        error: "Utilisateur inexistant ou mot de passe incorrect",
+      });
     }
   });
 });
+
 module.exports = router;
