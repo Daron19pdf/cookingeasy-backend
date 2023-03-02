@@ -28,7 +28,7 @@ const recetteSchema = mongoose.Schema({
                 stage: String,
                 duration: Number,
                 action: String,
-                target: ["String"]
+                target: [String]
             }
         ]
     }
