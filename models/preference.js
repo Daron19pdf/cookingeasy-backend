@@ -47,6 +47,8 @@ equipement : equipementSchema,
 regime : regimeSchema,
 //Collection sous doc Aliment à exclure//
 alimentExclu : alimentExcluSchema,
+
+token: String,
 });
 
 const Preference = mongoose.model('preference', preferenceSchema);
