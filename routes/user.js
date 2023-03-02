@@ -71,4 +71,15 @@ router.post("/signin", (req, res) => {
   });
 });
 
+  router.delete("/delete", (req, res) => {
+  const token = req.body.token;
+  User.findOneAndDelete({ token: token }).then((data) => {
+    if (data === null) {
+      res.json({ result: false, error: "Utilisateur inexistant" });
+    } else {
+      res.json({ result: true });
+    }
+  });
+});
+
 module.exports = router;
