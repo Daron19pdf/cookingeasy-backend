@@ -18,8 +18,6 @@ router.get("/preferences/:id", (req, res) => {
 
 
 
-
-
 router.get("/recettes", (req, res) => {
   const userId = req.query.userId;
 
