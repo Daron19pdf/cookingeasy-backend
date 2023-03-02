@@ -9,6 +9,7 @@ const fetch = require('node-fetch');
 var indexRouter = require('./routes/index');
 var UserRouter = require('./routes/user');
 var PreferencesRouter = require('./routes/preferences');
+var MenuRouter = require('./routes/menu');
 
 var app = express();
 
@@ -23,5 +24,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/user', UserRouter);
 app.use('/preferences', PreferencesRouter);
+app.use('/menu', MenuRouter);
 
 module.exports = app;

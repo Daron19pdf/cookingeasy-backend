@@ -2,25 +2,37 @@ const mongoose = require('mongoose');
 
 //collection recette//
 const recetteSchema = mongoose.Schema({
-	
-    photo:String, 
-    nom: String,
-    tempsPreparation: Number,
-    tempsCuisson: Number,
-    tempsTotal: Number, 
-    dificulté: Number, 
-    nombrePersonne: Number,
-    equipement:String,
-    ingrédients: String,
-    quantité: String,
-    nomIngrédients: String,
-    tags: String,
-    step1: String,
-    step2: String,
-    step3: String,
-    step4: String,
-    conservation: String,
-});
+
+        title: String,
+        photo: String,
+        prep_duration: Number,
+        cook_duration: Number,
+        duration: Number,
+        difficulty: Number,
+        servings: Number,
+        description: String,
+        course_type: String,
+        diet_tags: [String],
+        appliance_tags: [String],
+        preservation_duration: String,
+        ingredients: [
+            {
+                name: String,
+                quantity: Number,
+                unit: String,
+                is_primary: Boolean
+            }, 
+        ],
+        steps: [
+            {
+                stage: String,
+                duration: Number,
+                action: String,
+                target: ["String"]
+            }
+        ]
+    }
+);
 
 const Recette = mongoose.model('recette', recetteSchema);
 

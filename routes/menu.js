@@ -1,44 +1,57 @@
 var express = require("express");
 var router = express.Router();
-const mongoose = require("mongoose");
-const User = require("../models/users");
 const Preference = require("../models/preference");
-const uid2 = require("uid2");
 const fetch = require('node-fetch')
+const Recipe = require("../models/recipe");
 
-router.get("/preference", (req, res) => {
-    const { vegetarien,vegan,pescetarien,gluten,porc,alcool,lactose,sansRegimeParticulier, token } = req.body;
-    User.findOne({ token: token }).then(async (user) => {
-      if (user) {
-        const preferenceUser = await Preference.findById(user.preference);
-          preferenceUser.regime = {
-            vegetarien: vegetarien,
-            vegan: vegan,
-            pescetarien: pescetarien,
-            gluten: gluten,
-            porc: porc, 
-            alcool: alcool,
-            lactose: lactose, 
-            sansRegimeParticulier : sansRegimeParticulier,
-            token: token,
-          };
-          preferenceUser.save().then(() => {
-            res.json({ result: true });
-          });
-      } else {
-        res.json({ result: false, error: "Utilisateur inexistant." });
-      }
-    });
-
+// Route GET qui récupère les préférences d'un utilisateur dans la collection preferences en utilisant son ID preference (et non son ID utilisateur...)
+router.get("/preferences/:id", (req, res) => {
+  const userId = req.params.id;
+  Preference.findOne({ _id: userId }).then((userPreferences) => {
+    if (userPreferences) {
+      res.json({ result: true, preferences: userPreferences });
+    } else {
+      res.json({ result: false, error: "Utilisateur inexistant." });
+    }
   });
+});
 
 
 
 
 
+router.get("/recettes", (req, res) => {
+  const userId = req.query.userId;
 
-  
-  
+  // On récupère les préférences de l'utilisateur
+  Preference.findOne({ _id: userId }).then((userPreferences) => {
+    if (!userPreferences) {
+      return res.json({ result: false, error: "Utilisateur inexistant." });
+    }
+
+    // On construit le critère de recherche pour les recettes en fonction des préférences de l'utilisateur
+    const searchCriteria = {};
+
+    if (userPreferences.equipement.robot) {
+      searchCriteria["appliance_tags"] = "robot";
+    }
+
+    if (userPreferences.regime.vegetarien) {
+      searchCriteria["diet_tags"] = "végétarien";
+    }
+
+    // On lance la recherche
+    Recipe.find(searchCriteria).then((recipes) => {
+      res.json({ result: true, recipes });
+    }).catch((error) => {
+      console.error(error);
+      res.json({ result: false, error: "Erreur lors de la recherche des recettes." });
+    });
+  }).catch((error) => {
+    console.error(error);
+    res.json({ result: false, error: "Erreur lors de la récupération des préférences de l'utilisateur." });
+  });
+});
 
 
   module.exports = router;
