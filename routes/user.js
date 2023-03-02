@@ -13,6 +13,11 @@ router.post("/signup", (req, res) => {
     res.json({ result: false, error: "Tous les champs doivent être remplis" });
     return;
   }
+  const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  if (!emailRegex.test(req.body.email)) {
+    res.json({ result: false, error: "Le format de l'email est invalide" });
+    return;
+  }
 
   User.findOne({ email: req.body.email }).then((data) => {
     if (data === null) {
@@ -49,8 +54,6 @@ router.post("/signin", (req, res) => {
   }
 
   User.findOne({ pseudo: req.body.pseudo }).then((data) => {
-    console.log(req.body.password, data.password);
-    console.log(bcrypt.compareSync(req.body.password, data.password));
     if (data && bcrypt.compareSync(req.body.password, data.password)) {
       res.json({
         result: true,
