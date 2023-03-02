@@ -42,4 +42,18 @@ router.post("/signup", (req, res) => {
   });
 });
 
+router.post('/signin', (req, res) => {
+  if (!checkBody(req.body, ['pseudo', 'password'])) {
+    res.json({ result: false, error: 'Tous les champs doivent être remplis' });
+    return;
+  }
+
+  User.findOne({ pseudo: req.body.pseudo }).then(data => {
+    if (data && bcrypt.compareSync(req.body.password, data.password)) {
+      res.json({ result: true, nom: data.nom, prenom: data.prenom, email: data.email, token: data.token });
+    } else {
+      res.json({ result: false, error: 'Utilisateur inexistant ou mot de passe incorrect' });
+    }
+  });
+});
 module.exports = router;
