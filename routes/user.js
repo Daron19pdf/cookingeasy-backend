@@ -71,15 +71,22 @@ router.post("/signin", (req, res) => {
   });
 });
 
-  router.delete("/delete", (req, res) => {
-  const token = req.body.token;
-  User.findOneAndDelete({ token: token }).then((data) => {
-    if (data === null) {
-      res.json({ result: false, error: "Utilisateur inexistant" });
-    } else {
-      res.json({ result: true });
+router.delete('/:token', async (req, res) => {
+  try {
+    // Find the user by token and populate their preference
+    const user = await User.findOne({ token: req.params.token }).populate('preference');
+    if (!user) {
+      return res.status(404).json({ message: 'Utilisateur inexistant' });
     }
-  });
+    // Delete the user's preference
+    await Preference.findByIdAndDelete(user.preference._id);
+    // Delete the user
+    await User.deleteOne({ _id: user._id });
+    res.json({ message: 'User and preference deleted successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
 });
 
 module.exports = router;
