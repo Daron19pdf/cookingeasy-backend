@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 const Preference = require("../models/preference");
 const fetch = require('node-fetch')
-const Recipe = require("../models/recipe");
+const Recipe = require("../models/recette");
 
 // Route GET qui récupère les préférences d'un utilisateur dans la collection preferences en utilisant son ID preference (et non son ID utilisateur...)
 router.get("/preferences/:id", (req, res) => {
