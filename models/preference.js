@@ -21,7 +21,7 @@ token: String,
 //Sous document Régime alimentaire//
 const regimeSchema = mongoose.Schema({
 vegetarien: Boolean,
-vegan: Boolean,
+vegetalien: Boolean,
 pescetarien: Boolean,
 gluten: Boolean,
 porc: Boolean, 
