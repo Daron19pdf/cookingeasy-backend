@@ -36,6 +36,10 @@ const alimentExcluSchema = mongoose.Schema({
 exclus: String,
 token: String,
 });
+//Sous document Token//
+const tokenSchema = mongoose.Schema({
+    token: String,
+});
 
 //Collection sous doc Préférence//
 const preferenceSchema = mongoose.Schema({
@@ -47,8 +51,8 @@ equipement : equipementSchema,
 regime : regimeSchema,
 //Collection sous doc Aliment à exclure//
 alimentExclu : alimentExcluSchema,
-
-token: String,
+// Token à récuperer pour recettes
+token : tokenSchema,
 });
 
 const Preference = mongoose.model('preference', preferenceSchema);
