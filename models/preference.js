@@ -37,6 +37,12 @@ exclus: String,
 token: String,
 });
 
+const thisWeekSchema = mongoose.Schema({
+    duration: Number,
+    difficulty: Number,
+    token: String,
+    });
+
 //Collection sous doc Préférence//
 const preferenceSchema = mongoose.Schema({
 //Collection sous doc Foyer//
@@ -47,7 +53,8 @@ equipement : equipementSchema,
 regime : regimeSchema,
 //Collection sous doc Aliment à exclure//
 alimentExclu : alimentExcluSchema,
-
+// Collection sous document - this Week (difficulté + durée)
+thisWeek : thisWeekSchema,
 });
 
 const Preference = mongoose.model('preference', preferenceSchema);
