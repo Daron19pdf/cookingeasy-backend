@@ -88,8 +88,8 @@ router.get("/recettes", (req, res) => {
           $not: { $elemMatch: { $nin: searchCriteria["appliance_tags"] } }, 
         },
         diet_tags: { $all: searchCriteria["diet_tags"] },
-        //difficulty: { $lte: userPreferences.thisweek.difficulty },
-        //duration: { $lte: userPreferences.thisweek.duration },
+        difficulty: { $lte: userPreferences.thisWeek.difficulty },
+        duration: { $lte: userPreferences.thisWeek.duration },
          
       })
         .then((recettes) => {
