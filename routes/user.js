@@ -89,5 +89,19 @@ router.delete('/:token', async (req, res) => {
   }
 });
 
+router.get("/:token", (req, res) => {
+  User.findOne({ token: req.query.token })
+    .populate("preference")
+    .then((data) => {
+      if (data) {
+        res.json({
+          result: true,
+          data
+        });
+      } else {
+        res.json({ result: false, error: "Utilisateur inexistant" });
+      }
+    });
+});
 
 module.exports = router;
