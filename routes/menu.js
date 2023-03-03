@@ -79,17 +79,18 @@ router.get("/recettes", (req, res) => {
       }
 
       //pref/difficulté et temps => voir avec sarah car je ne les trouve pas dans la base de données (penser à prendre valeur inferieur avec des lessthan)
-       
+       //https://www.mongodb.com/docs/manual/reference/operator/query/lte/
       // On lance la recherche des recettes correspondant aux critères (les recettes pour lesquelles toutes les appliances de l'utilisateur sont dans les appliances de la recette)
-     
+     //$not "pas" au moins. $elemMatch: appliance qui n'est pas dans "$nin" les appliances de l'utilisateur
+
       Recette.find({
         appliance_tags: {
-          $not: { $elemMatch: { $nin: searchCriteria["appliance_tags"] } }, //$not "pas" au moins. $elemMatch: appliance qui n'est pas dans "$nin" les appliances de l'utilisateur
+          $not: { $elemMatch: { $nin: searchCriteria["appliance_tags"] } }, 
         },
         diet_tags: { $all: searchCriteria["diet_tags"] },
-        // difficulty: { $lte: userPreferences.difficulte },
-        // duration: { $lte: userPreferences.temps },
-         //https://www.mongodb.com/docs/manual/reference/operator/query/lte/
+        //difficulty: { $lte: userPreferences.thisweek.difficulty },
+        //duration: { $lte: userPreferences.thisweek.duration },
+         
       })
         .then((recettes) => {
           const recetteNames = recettes.map((recette) => {
