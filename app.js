@@ -5,12 +5,12 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const fetch = require('node-fetch');
+var nodemailer = require('nodemailer');
 
 var indexRouter = require('./routes/index');
 var UserRouter = require('./routes/user');
 var PreferencesRouter = require('./routes/preferences');
 var MenuRouter = require('./routes/menu');
-
 var app = express();
 
 const cors = require('cors');

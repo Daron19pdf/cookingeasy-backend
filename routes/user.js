@@ -82,10 +82,19 @@ router.delete('/:token', async (req, res) => {
     await Preference.findByIdAndDelete(user.preference._id);
     // Delete the user
     await User.deleteOne({ _id: user._id });
-    res.json({ message: 'User and preference deleted successfully' });
+    res.json({ message: "L'utilisateur et ses préférences ont bien été supprimés." });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+});
+
+// Create a nodemailer transporter object
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD
   }
 });
 
