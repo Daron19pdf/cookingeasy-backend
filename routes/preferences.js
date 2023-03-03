@@ -111,6 +111,25 @@ router.post("/equipement", (req, res) => {
     })
   });
 
+  router.post('/thisweek' , (req, res) => {
+    const { duration, difficulty, token } = req.body;
+    User.findOne({ token: token }).then(async (user) => {
+      if (user) {
+        const preferenceUser = await Preference.findById(user.preference);
+          preferenceUser.thisWeek = {
+            duration: duration,
+            difficulty: difficulty,
+            token: token,
+          };
+          preferenceUser.save().then(() => {
+            res.json({ result: true });
+          });
+      } else {
+        res.json({ result: false, error: "Utilisateur inexistant." });
+      }
+    });
+
+  })
 
 
   module.exports = router;
