@@ -81,19 +81,23 @@ router.get("/recettes", (req, res) => {
       //pref/difficulté et temps => voir avec sarah car je ne les trouve pas dans la base de données (penser à prendre valeur inferieur avec des lessthan)
       // https://www.mongodb.com/docs/manual/reference/operator/query/lte/
       // On lance la recherche des recettes correspondant aux critères
-      Recette.find(
-        {
-          appliance_tags: {
-            $not: { $elemMatch: { $nin: searchCriteria["appliance_tags"] } },
-          },
-          diet_tags: { $all: searchCriteria["diet_tags"] },
-          // difficulty: { $lte: userPreferences.difficulte },
-          // duration: { $lte: userPreferences.temps },
+      Recette.find({
+        appliance_tags: {
+          $not: { $elemMatch: { $nin: searchCriteria["appliance_tags"] } },
         },
-        "title"
-      )
+        diet_tags: { $all: searchCriteria["diet_tags"] },
+        // difficulty: { $lte: userPreferences.difficulte },
+        // duration: { $lte: userPreferences.temps },
+      })
         .then((recettes) => {
-          const recetteNames = recettes.map((recette) => recette.title);
+          // const recetteNames = recettes.map((recette) => recette.title);
+          const recetteNames = recettes.map((recette) => {
+            return {
+              title: recette.title,
+              id: recette._id,
+              photo: recette.photo,
+            };
+          });
           res.json({ result: true, recettes: recetteNames });
         })
         .catch((error) => {
@@ -115,3 +119,5 @@ router.get("/recettes", (req, res) => {
 });
 
 module.exports = router;
+
+//ct sortir de mongoose et avoir un tb avec les recettes selectionnées pour pouvoir chercher en javascript pur
