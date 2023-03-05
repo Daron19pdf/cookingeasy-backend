@@ -4,7 +4,7 @@ const Preference = require("../models/preference");
 const fetch = require("node-fetch");
 const Recette = require("../models/recette");
 
-// Route GET qui récupère les préférences d'un utilisateur dans la collection preferences en utilisant son ID preference (et non son ID utilisateur...)
+{/* A VIRER PAR VP EN RELECTURE// Route GET qui récupère les préférences d'un utilisateur dans la collection preferences en utilisant son ID preference (et non son ID utilisateur...)
 
 router.get("/preferences/:id", (req, res) => {
   const userId = req.params.id;
@@ -16,6 +16,8 @@ router.get("/preferences/:id", (req, res) => {
     }
   });
 });
+
+*/}
 
 // Route GET qui récupère les préférences d'un utilisateur dans la collection preferences en utilisant son ID preference (et non son ID utilisateur...)
 router.get("/recettes", (req, res) => {
@@ -92,6 +94,7 @@ router.get("/recettes", (req, res) => {
         duration: { $lte: userPreferences.thisWeek.duration },
          
       })
+      .limit(userPreferences.foyer.nombreRecette)
         .then((recettes) => {
           const recetteNames = recettes.map((recette) => {
             return {
