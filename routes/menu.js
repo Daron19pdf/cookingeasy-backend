@@ -98,6 +98,18 @@ router.get("/recettes", (req, res) => {
               title: recette.title,
               id: recette._id,
               photo: recette.photo,
+              prep_duration: recette.prep_duration,
+              cook_duration: recette.cook_duration,
+              duration: recette.duration,
+              difficulty: recette.difficulty,
+              servings: recette.servings,
+              description: recette.description,
+              course_type: recette.course_type,
+              diet_tags: recette.diet_tags,
+              appliance_tags: recette.appliance_tags,
+              preservation_duration: recette.preservation_duration,
+              ingredients: recette.ingredients,
+              steps: recette.steps,
             };
           });
           res.json({ result: true, recettes: recetteNames });
