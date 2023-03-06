@@ -4,7 +4,7 @@ const Preference = require("../models/preference");
 const fetch = require("node-fetch");
 const Recette = require("../models/recette");
 
-// Route GET qui récupère les préférences d'un utilisateur dans la collection preferences en utilisant son ID preference (et non son ID utilisateur...)
+{/* A VIRER PAR VP EN RELECTURE// Route GET qui récupère les préférences d'un utilisateur dans la collection preferences en utilisant son ID preference (et non son ID utilisateur...)
 
 router.get("/preferences/:id", (req, res) => {
   const userId = req.params.id;
@@ -16,6 +16,8 @@ router.get("/preferences/:id", (req, res) => {
     }
   });
 });
+
+*/}
 
 // Route GET qui récupère les préférences d'un utilisateur dans la collection preferences en utilisant son ID preference (et non son ID utilisateur...)
 router.get("/recettes", (req, res) => {
@@ -92,12 +94,25 @@ router.get("/recettes", (req, res) => {
         duration: { $lte: userPreferences.thisWeek.duration },
          
       })
+      .limit(userPreferences.foyer.nombreRecette)
         .then((recettes) => {
           const recetteNames = recettes.map((recette) => {
             return {
               title: recette.title,
               id: recette._id,
               photo: recette.photo,
+              prep_duration: recette.prep_duration,
+              cook_duration: recette.cook_duration,
+              duration: recette.duration,
+              difficulty: recette.difficulty,
+              servings: recette.servings,
+              description: recette.description,
+              course_type: recette.course_type,
+              diet_tags: recette.diet_tags,
+              appliance_tags: recette.appliance_tags,
+              preservation_duration: recette.preservation_duration,
+              ingredients: recette.ingredients,
+              steps: recette.steps,
             };
           });
           res.json({ result: true, recettes: recetteNames });
