@@ -18,8 +18,8 @@ router.get("/miseenoeuvre", (req, res) => {
       prep: [],
       cuisson: [],
       assemblage: [],
-      "cuisson finale": [],
-      "remise en oeuvre": [],
+      cuisson_finale: [],
+      remise_en_oeuvre: [],
     };
 
     recettes.forEach((recette) => {
