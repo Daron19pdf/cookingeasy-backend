@@ -13,33 +13,53 @@ function union(setA, setB) {
   return _union;
 }
 
-//Cette variable sert à stocker le nombre d'appels à la fonction best_recettes_set.
-var nb_calls = 0;
 
-// fonction recursive qui prend en entrée: une liste de recettes (cur_recettesList), un ensemble d'ingrédients (cur_ingredientSet) et le nombre de recettes à ajouter (nb_recettes_to_add).
+//FONCTION QUI RENVOIE LE NOMBRE DE RECETTES CHOISIES PAR L'UTILISATEUR QUI NECESSITENT LE + PETIT NOMBRE D'INGREDIENTS PRIMAIRES (la liste d'ingrédients..)
 
+// fonction recursive qui prend en entrée:
+//  - une liste de recettes (cur_recettesList),
+//  - un ensemble d'ingrédients déjà nécessaires (cur_ingredientSet)
+//  - le nombre de recettes à ajouter (nb_recettes_to_add).
+// et retourne:
+//  - la taille de l'ensemble d'ingrédients nécessaire y compris pour les nb_recettes_to_add recettes ajoutées
+//  - la liste optimale des recettes à ajouter
 function best_recettes_set(cur_recettesList, cur_ingredientSet, nb_recettes_to_add) {
-  nb_calls += 1;
-
+  // S'il n'est plus nécessaire d'ajouter de recette, alors la recherche est terminée et la fonction renvoie:
+  // un tableau contenant la taille de l'ensemble d'ingrédients courant et un tableau vide (puisque aucune recette ne doit être ajoutée).
   if (nb_recettes_to_add == 0) {
     return [cur_ingredientSet.size, []];
   }
 
+  // Initialise la variable best, qui sera utilisée pour stocker la meilleure combinaison de recettes trouvée jusqu'à présent.
+  // Infinity pour la taille de l'ensemble d'ingrédients (qui sera mis à jour lorsqu'une combinaison meilleure sera trouvée)
+  // [] pour les recettes
   let best = [Infinity, []];
+  //boucle qui parcourt toutes les recettes selectionnables.
+  // "- nb_recettes_to_add + 1" car choisir une recette plus loin ne perttrait pas d'ajouter nb_recettes_to_add recettes
   for (let i = 0; i < cur_recettesList.length - nb_recettes_to_add + 1; i++) {
+    // crée une nouvelle liste de recettes à partir de la liste courante, en excluant la recette i  
     const new_recettesList = cur_recettesList.slice(i + 1);
+    // crée un nouvel ensemble d'ingrédients en unissant l'ensemble courant avec les ingrédients de la recette i
     const new_ingredientSet = union(cur_ingredientSet, cur_recettesList[i].ingredients);
 
+    //appelle récursivement la fonction best_recettes_set avec
+    // - la nouvelle liste de recettes
+    // - le nouvel ensemble d'ingrédients
+    // - le nombre de recettes à ajouter (donc réduit de 1)
     const ret = best_recettes_set(new_recettesList, new_ingredientSet, nb_recettes_to_add - 1);
-
+    // cette condition vérifie si la combinaison de recettes retournée par l'appel récursif est meilleure que celle stockée dans best. 
+    //  - La meilleure taille d'ensemble d'ingrédients est donc maintenant celle retournée (ret[0])
+    //  - la liste de recettes pour l'obtenir est la concaténation de la recette i avec la liste retournée optimale du sous-problème (ret[1])
     if (ret[0] < best[0]) {
       best[0] = ret[0];
       best[1] = [cur_recettesList[i].element].concat(ret[1]);
     }
   }
-
+  // la fonction retourne la meilleure combinaison de recettes
   return best;
 }
+
+
 
 // Route GET qui récupère les préférences d'un utilisateur dans la collection preferences en utilisant son ID preference (et non son ID utilisateur...)
 router.get("/recettes", (req, res) => {
@@ -133,42 +153,6 @@ router.get("/recettes", (req, res) => {
           );
 
           res.json({ result: true, nb_primary_ingredients: nb_ingredients, recettes: bestRecettesList });
-
-          console.log("nb_calls", nb_calls);
-
-          // const ingredientsList = recettes.map((recette) => recette.ingredients.map((ingredient) => ingredient.name));
-
-          // // boucle imbriquée pour comparer chaque paire de recettes et stocker le nombre d'ingrédients communs entre chaque paire dans un tableau
-          // const similarities = [];
-          // for (let i = 0; i < ingredientsList.length; i++) {
-          //   for (let j = i + 1; j < ingredientsList.length; j++) {
-          //     const commonIngredients = ingredientsList[i].filter((ingredient) =>
-          //       ingredientsList[j].includes(ingredient)
-          //     );
-          //     similarities.push({
-          //       recette1: recettes[i]._id,
-          //       recette2: recettes[j]._id,
-          //       similarity: commonIngredients.length,
-          //     });
-          //   }
-          // }
-
-          // // trier les recettes en fonction du nombre d'ingrédients communs
-          // similarities.sort((a, b) => b.similarity - a.similarity);
-
-          // // récupérer les 5 recettes avec le plus d'ingrédients communs
-          // const top5Recettes = [];
-          // for (let i = 0; i < 5; i++) {
-          //   const recette1 = recettes.find((recette) => recette._id.equals(similarities[i].recette1));
-          //   const recette2 = recettes.find((recette) => recette._id.equals(similarities[i].recette2));
-          //   top5Recettes.push({
-          //     recette1: recette1,
-          //     recette2: recette2,
-          //     similarity: similarities[i].similarity,
-          //   });
-          // }
-
-          // res.json({ result: true, recettes: top5Recettes });
         })
         .catch((error) => {
           console.error(error);
@@ -178,20 +162,6 @@ router.get("/recettes", (req, res) => {
           });
         });
 
-      //   .populate(userPreferences.ingredients.name) // récupère les données de la collection Ingredient associée à chaque recette
-      //     .then((recettes) => {
-      //       // tableau qui va stocker les ingrédients de chaque recette
-
-      //     })
-      //     .catch((error) => {
-      //       console.error(error);
-      //       res.json({
-      //         result: false,
-      //         error: "Erreur lors de la recherche des recettes.",
-      //       });
-      //     });
-
-      //   }
     })
     .catch((error) => {
       console.error(error);
@@ -204,41 +174,4 @@ router.get("/recettes", (req, res) => {
 
 module.exports = router;
 
-//ct sortir de mongoose et avoir un tb avec les recettes selectionnées pour pouvoir chercher en javascript pur
 
-// .populate(userPreferences.ingredients.name) // récupère les données de la collection Ingredient associée à chaque recette
-//   .then((recettes) => {
-//     // tableau qui va stocker les ingrédients de chaque recette
-//     const ingredientsList = recettes.map((recette) => recette.ingredients.map((ingredient) => ingredient.name));
-
-//     // boucle imbriquée pour comparer chaque paire de recettes et stocker le nombre d'ingrédients communs entre chaque paire dans un tableau
-//     const similarities = [];
-//     for (let i = 0; i < ingredientsList.length; i++) {
-//       for (let j = i + 1; j < ingredientsList.length; j++) {
-//         const commonIngredients = ingredientsList[i].filter((ingredient) => ingredientsList[j].includes(ingredient));
-//         similarities.push({ recette1: recettes[i]._id, recette2: recettes[j]._id, similarity: commonIngredients.length });
-//       }
-//     }
-
-//     // trier les recettes en fonction du nombre d'ingrédients communs
-//     similarities.sort((a, b) => b.similarity - a.similarity);
-
-//     // récupérer les 5 recettes avec le plus d'ingrédients communs
-//     const top5Recettes = [];
-//     for (let i = 0; i < 5; i++) {
-//       const recette1 = recettes.find((recette) => recette._id.equals(similarities[i].recette1));
-//       const recette2 = recettes.find((recette) => recette._id.equals(similarities[i].recette2));
-//       top5Recettes.push({ recette1: recette1, recette2: recette2, similarity: similarities[i].similarity });
-//     }
-
-//     res.json({ result: true, recettes: top5Recettes });
-//   })
-//   .catch((error) => {
-//     console.error(error);
-//     res.json({
-//       result: false,
-//       error: "Erreur lors de la recherche des recettes.",
-//     });
-//   });
-
-// }

@@ -12,6 +12,7 @@ var UserRouter = require('./routes/user');
 var PreferencesRouter = require('./routes/preferences');
 var MenuRouter = require('./routes/menu');
 var MenuBisRouter = require('./routes/menuBis');
+var MenuTerRouter = require('./routes/menuTer');
 var app = express();
 
 const cors = require('cors');
@@ -27,5 +28,6 @@ app.use('/user', UserRouter);
 app.use('/preferences', PreferencesRouter);
 app.use('/menu', MenuRouter);
 app.use('/menuBis', MenuBisRouter);
+app.use('/menuTer', MenuTerRouter);
 
 module.exports = app;
