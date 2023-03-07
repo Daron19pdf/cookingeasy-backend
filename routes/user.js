@@ -104,5 +104,43 @@ router.get("/:token", (req, res) => {
     });
 });
 
+router.post("/update", (req, res) => {
+  if (!checkBody(req.body, ["pseudo", "nom", "prenom", "password", "email"])) {
+    res.json({ result: false, error: "Tous les champs doivent être remplis" });
+    return;
+  }
+  const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  if (!emailRegex.test(req.body.email)) {
+    res.json({ result: false, error: "Le format de l'email est invalide" });
+    return;
+  }
+
+  User.findOne({ email: req.body.token }).then((data) => {
+    if (data === null) {
+      const hash = bcrypt.hashSync(req.body.password, 10);
+      const newPref = new Preference({});
+
+      newPref.save().then((newPref) => {
+        const newUser = new User({
+          pseudo: req.body.pseudo,
+          nom: req.body.nom,
+          prenom: req.body.prenom,
+          password: hash,
+          email: req.body.email,
+          token: uid2(32),
+          preference: newPref._id,
+          editor: { type: mongoose.Schema.Types.ObjectId, ref: "editors" },
+        });
+
+        newUser.save().then((data) => {
+          console.log(data);
+          res.json({ result: true, token: data.token });
+        });
+      });
+    } else {
+      res.json({ result: false, error: "L'utilisateur existe déjà." });
+    }
+  });
+});
 
 module.exports = router;
