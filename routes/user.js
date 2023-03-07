@@ -96,7 +96,7 @@ router.get("/:token", (req, res) => {
       if (data) {
         res.json({
           result: true,
-          data
+          data 
         });
       } else {
         res.json({ result: false, error: "Utilisateur inexistant" });
