@@ -3,6 +3,7 @@ var router = express.Router();
 const mongoose = require("mongoose");
 const User = require("../models/users");
 const Preference = require("../models/preference");
+const Recette = require("../models/recette");
 const uid2 = require("uid2");
 const { checkBody } = require("../modules/checkBody");
 const fetch = require("node-fetch");
@@ -91,14 +92,20 @@ router.delete('/:token', async (req, res) => {
   }
 });
 
+// Get all recipes of a user
 router.get("/:token", (req, res) => {
   User.findOne({ token: req.query.token })
     .populate("preference")
     .then((data) => {
       if (data) {
-        res.json({
-          result: true,
-          data 
+        Recette.find({ user: data.preference._id })
+        .then((recettes) => {
+          if (recettes) {
+            res.json({
+              result: true,
+              recettes 
+            });
+          }
         });
       } else {
         res.json({ result: false, error: "Utilisateur inexistant" });
