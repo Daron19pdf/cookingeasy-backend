@@ -54,6 +54,7 @@ router.post("/signin", (req, res) => {
   }
 
   User.findOne({ pseudo: req.body.pseudo }).then((data) => {
+    console.log(data);
     if (data && bcrypt.compareSync(req.body.password, data.password)) {
       res.json({
         result: true,
@@ -61,6 +62,7 @@ router.post("/signin", (req, res) => {
         prenom: data.prenom,
         email: data.email,
         token: data.token,
+        preference: data.preference,
       });
     } else {
       res.json({
