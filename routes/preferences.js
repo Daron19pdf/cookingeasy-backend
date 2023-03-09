@@ -73,6 +73,17 @@ router.post("/equipement", (req, res) => {
 
   });
 
+  router.get('/foyer', (req,res) => {
+    Preference.find().then(data => {
+      if (data) {
+        console.log(data);
+        res.json( {result : true , data})
+      } else {
+        res.json({result : false })
+      }
+    })
+  });
+
   router.post("/regime", (req, res) => {
     const { vegetarien,vegan,pescetarien,gluten,porc,alcool,lactose,sansRegimeParticulier, token } = req.body;
     User.findOne({ token: token }).then(async (user) => {
@@ -110,6 +121,7 @@ router.post("/equipement", (req, res) => {
       }
     })
   });
+
 
   router.post('/thisweek' , (req, res) => {
     const { duration, difficulty, token } = req.body;

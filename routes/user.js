@@ -113,6 +113,8 @@ router.get("/:token", (req, res) => {
     });
 });
 
+
+
 router.post("/update", (req, res) => {
   if (!checkBody(req.body, ["pseudo", "nom", "prenom", "password", "email"])) {
     res.json({ result: false, error: "Tous les champs doivent être remplis" });
